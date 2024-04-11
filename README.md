@@ -1,11 +1,10 @@
 This is a test
 more words here
 
-Quick test test case.
+Quick 0x00ffee case.
 
 https://example.com
 
 meep
-eepeee
 
 https://cspell.org/configuration/document-settings/
