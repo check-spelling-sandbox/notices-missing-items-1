@@ -92,7 +92,7 @@ jobs:
     steps:
       - name: check-spelling
         id: spelling
-        uses: check-spelling/check-spelling@prerelease
+        uses: jsoref/check-spelling@prerelease
         with:
           suppress_push_for_open_pull_request: ${{ github.actor != 'dependabot[bot]' && 1 }}
           checkout: true
@@ -107,6 +107,7 @@ jobs:
           extra_dictionary_limit: 20
           extra_dictionaries: |
             cspell:software-terms/dict/softwareTerms.txt
+          debug: 1
 
   comment-push:
     name: Report (Push)
@@ -119,11 +120,12 @@ jobs:
     if: (success() || failure()) && needs.spelling.outputs.followup && github.event_name == 'push'
     steps:
       - name: comment
-        uses: check-spelling/check-spelling@prerelease
+        uses: jsoref/check-spelling@prerelease
         with:
           checkout: true
           spell_check_this: check-spelling/spell-check-this@prerelease
           task: ${{ needs.spelling.outputs.followup }}
+          debug: 1
 
   comment-pr:
     name: Report (PR)
@@ -137,12 +139,13 @@ jobs:
     if: (success() || failure()) && needs.spelling.outputs.followup && contains(github.event_name, 'pull_request')
     steps:
       - name: comment
-        uses: check-spelling/check-spelling@prerelease
+        uses: jsoref/check-spelling@prerelease
         with:
           checkout: true
           spell_check_this: check-spelling/spell-check-this@prerelease
           task: ${{ needs.spelling.outputs.followup }}
           experimental_apply_changes_via_bot: 1
+          debug: 1
 
   update:
     name: Update PR
@@ -161,8 +164,9 @@ jobs:
       cancel-in-progress: false
     steps:
       - name: apply spelling updates
-        uses: check-spelling/check-spelling@prerelease
+        uses: jsoref/check-spelling@prerelease
         with:
           experimental_apply_changes_via_bot: 1
           checkout: true
           ssh_key: "${{ secrets.CHECK_SPELLING }}"
+          debug: 1
